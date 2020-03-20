@@ -1,38 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CoreCodeCamp.Data;
+﻿using CoreCodeCamp.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Hosting;
 
 namespace CoreCodeCamp
 {
-  public class Startup
-  {
-    public void ConfigureServices(IServiceCollection services)
+    public class Startup
     {
-      services.AddDbContext<CampContext>();
-      services.AddScoped<ICampRepository, CampRepository>();
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-      services.AddMvc()
-        .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-    }
+        public IConfiguration Configuration { get; }
 
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-    {
-      if (env.IsDevelopment())
-      {
-        app.UseDeveloperExceptionPage();
-      }
-      
-      app.UseMvc();
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddDbContext<CampContext>();
+            services.AddScoped<ICampRepository, CampRepository>();
+
+            services.AddControllers();
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
     }
-  }
 }
