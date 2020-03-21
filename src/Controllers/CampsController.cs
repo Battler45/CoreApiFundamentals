@@ -113,7 +113,7 @@ namespace CoreCodeCamp.Controllers
         }
         
         [HttpDelete("{moniker}")]
-        public async Task<ActionResult<CampModel>> Delete(string moniker)
+        public async Task<IActionResult> Delete(string moniker)
         {
             try
             {
