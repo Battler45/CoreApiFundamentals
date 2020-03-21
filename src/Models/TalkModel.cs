@@ -4,6 +4,7 @@ namespace CoreCodeCamp.Models
 {
     public class TalkModel
     {
+        public int TalkId { get; set; }
         [Required]
         [StringLength(100)]
         public string Title { get; set; }
