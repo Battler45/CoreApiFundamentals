@@ -7,10 +7,14 @@ namespace CoreCodeCamp.Data
     {
         public CampProfile()
         {
-            CreateMap<Camp, CampModel>();
-            CreateMap<Location, LocationModel>();
-            CreateMap<Talk, TalkModel>();
-            CreateMap<Speaker, SpeakerModel>();
+            CreateMap<Camp, CampModel>()
+                .ReverseMap();
+            CreateMap<Location, LocationModel>()
+                .ReverseMap();
+            CreateMap<Talk, TalkModel>()
+                .ReverseMap();
+            CreateMap<Speaker, SpeakerModel>()
+                .ReverseMap();
         }
     }
 }

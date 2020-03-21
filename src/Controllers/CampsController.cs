@@ -3,6 +3,7 @@ using CoreCodeCamp.Data;
 using CoreCodeCamp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,10 +16,12 @@ namespace CoreCodeCamp.Controllers
     {
         private readonly ICampRepository _repository;
         private readonly IMapper _mapper;
-        public CampsController(ICampRepository repository, IMapper mapper)
+        private readonly LinkGenerator _linkGenerator;
+        public CampsController(ICampRepository repository, IMapper mapper, LinkGenerator linkGenerator)
         {
             _repository = repository;
             _mapper = mapper;
+            _linkGenerator = linkGenerator;
         }
 
         [HttpGet]
@@ -63,6 +66,29 @@ namespace CoreCodeCamp.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
             }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<CampModel>> Post([FromBody]CampModel campModel)
+        {
+            try
+            {
+                var campLocation = _linkGenerator.GetPathByAction(nameof(Get),
+                    "Camps", //nameof(CampsController).Replace("Controller", ""),
+                    new { moniker = campModel.Moniker });
+                if (string.IsNullOrWhiteSpace(campLocation)) return BadRequest("Could not use current moniker");
+                var camp = _mapper.Map<Camp>(campModel);
+                _repository.Add(camp);
+                if (await _repository.SaveChangesAsync())
+                {
+                    return Created(campLocation, campModel);
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+            return BadRequest();
         }
     }
 }
