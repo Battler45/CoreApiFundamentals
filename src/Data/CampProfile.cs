@@ -8,6 +8,9 @@ namespace CoreCodeCamp.Data
         public CampProfile()
         {
             CreateMap<Camp, CampModel>();
+            CreateMap<Location, LocationModel>();
+            CreateMap<Talk, TalkModel>();
+            CreateMap<Speaker, SpeakerModel>();
         }
     }
 }

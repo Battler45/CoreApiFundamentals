@@ -20,11 +20,11 @@ namespace CoreCodeCamp.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<CampModel[]>> Get()
+        public async Task<ActionResult<CampModel[]>> Get(bool includeTalks = false)
         {
             try
             {
-                var camps = await _repository.GetAllCampsAsync();
+                var camps = await _repository.GetAllCampsAsync(includeTalks);
                 return _mapper.Map<CampModel[]>(camps);
             }
             catch (Exception)
@@ -33,11 +33,11 @@ namespace CoreCodeCamp.Controllers
             }
         }
         [HttpGet("{moniker}")]
-        public async Task<ActionResult<CampModel>> Get(string moniker)
+        public async Task<ActionResult<CampModel>> Get(string moniker, bool includeTalks = false)
         {
             try
             {
-                var camp = await _repository.GetCampAsync(moniker);
+                var camp = await _repository.GetCampAsync(moniker, includeTalks);
                 if (camp == null) return NotFound();
                 return _mapper.Map<CampModel>(camp);
             }

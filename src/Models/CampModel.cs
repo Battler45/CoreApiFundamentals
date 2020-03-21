@@ -11,5 +11,7 @@ namespace CoreCodeCamp.Models
         public string Moniker { get; set; }
         public DateTime EventDate { get; set; } = DateTime.MinValue;
         public int Length { get; set; } = 1;
+        public LocationModel Location { get; set; }
+        public ICollection<TalkModel> Talks { get; set; }
     }
 }
