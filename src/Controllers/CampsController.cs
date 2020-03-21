@@ -75,9 +75,9 @@ namespace CoreCodeCamp.Controllers
             {
                 var esistingCamp = await _repository.GetCampAsync(campModel.Moniker);
                 if (esistingCamp != null) return BadRequest("Moniker in use");
-                var campLocation = _linkGenerator.GetPathByAction(nameof(Get),
-                    "Camps", //nameof(CampsController).Replace("Controller", ""),
-                    new { moniker = campModel.Moniker });
+                var campLocation = _linkGenerator.GetPathByAction(HttpContext, nameof(Get),
+                    //"Camps", //nameof(CampsController).Replace("Controller", ""),
+                    values: new { moniker = campModel.Moniker });
                 if (string.IsNullOrWhiteSpace(campLocation)) return BadRequest("Could not use current moniker");
                 var camp = _mapper.Map<Camp>(campModel);
                 _repository.Add(camp);
