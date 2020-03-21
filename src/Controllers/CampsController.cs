@@ -92,5 +92,44 @@ namespace CoreCodeCamp.Controllers
             }
             return BadRequest();
         }
+        [HttpPut("{moniker}")]
+        public async Task<ActionResult<CampModel>> Put(string moniker, CampModel campModel)
+        {
+            try
+            {
+                var camp = await _repository.GetCampAsync(moniker);
+                if (camp == null) return NotFound();
+                _mapper.Map(campModel, camp);
+                if (await _repository.SaveChangesAsync())
+                {
+                    return _mapper.Map<CampModel>(camp);
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+            return BadRequest();
+        }
+        
+        [HttpDelete("{moniker}")]
+        public async Task<ActionResult<CampModel>> Delete(string moniker)
+        {
+            try
+            {
+                var camp = await _repository.GetCampAsync(moniker);
+                if (camp == null) return NotFound();
+                _repository.Delete(camp);
+                if (await _repository.SaveChangesAsync())
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+            return BadRequest("failed to delete");
+        }
     }
 }
