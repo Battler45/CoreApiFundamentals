@@ -11,6 +11,7 @@ namespace CoreCodeCamp.Data
         public CampContext(DbContextOptions options, IConfiguration config) : base(options)
         {
             _config = config;
+            Database.EnsureCreated();
         }
 
         public DbSet<Camp> Camps { get; set; }
@@ -92,6 +93,6 @@ namespace CoreCodeCamp.Data
               });
 
         }
-
+        
     }
 }
