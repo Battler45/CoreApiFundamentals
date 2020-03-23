@@ -2,6 +2,7 @@
 using CoreCodeCamp.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +27,7 @@ namespace CoreCodeCamp
             services.AddApiVersioning(opt => {
                 opt.ReportApiVersions = true;
                 opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.ApiVersionReader = new HeaderApiVersionReader();
             });
 
             services.AddControllers();
